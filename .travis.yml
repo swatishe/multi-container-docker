@@ -9,7 +9,7 @@ script:
   - docker run -e CI=true swatis1209s/react-test npm test
 
 after_success:
-  - docker build -t swatis1209s/multi-container-client ./client/nginx
+  - docker build -t swatis1209s/multi-container-client ./client
   - docker build -t swatis1209s/multi-container-nginx ./nginx
   - docker build -t swatis1209s/multi-container-server ./server
   - docker build -t swatis1209s/multi-container-worker ./worker

@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install: 
+  - docker build -t swatis1209s/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true swatis1209s/react-test npm test
+
+after_success:
+  - docker build -t swatis1209s/multi-container-client ./client
+  - docker build -t swatis1209s/multi-container-nginx ./nginx
+  - docker build -t swatis1209s/multi-container-server ./server
+  - docker build -t swatis1209s/multi-container-worker ./worker
+
+  #Login Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  #Push Image to docker hub
+  - docker push swatis1209s/multi-container-client
+  - docker push swatis1209s/multi-container-nginx
+  - docker push swatis1209s/multi-container-server
+  - docker push swatis1209s/multi-container-worker
+
